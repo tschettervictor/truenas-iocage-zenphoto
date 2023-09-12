@@ -257,9 +257,9 @@ iocage exec "${JAIL_NAME}" sed -i '' "s/zenphoto_db_pass/${DB_PASSWORD}/" /usr/l
 iocage exec "${JAIL_NAME}" sed -i '' "s|zenphoto_db_socket|/var/run/mysql/mysql.sock|" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
 iocage exec "${JAIL_NAME}" sed -i '' "s/zenphoto_db/${DB_NAME}/" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
 iocage exec "${JAIL_NAME}" chown -R www:www /usr/local/www/zenphoto
-iocage exec "${JAIL_NAME}" chmod 0600 setup.log
-iocage exec "${JAIL_NAME}" chmod 0600 debug.log
-iocage exec "${JAIL_NAME}" chmod 0600 zenphoto.cfg.php
+iocage exec "${JAIL_NAME}" chmod 0600 /usr/local/www/zenphoto/zp-data/setup.log
+iocage exec "${JAIL_NAME}" chmod 0600 /usr/local/www/zenphoto/zp-data/debug.log
+iocage exec "${JAIL_NAME}" chmod 0600 /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
 
 #####
 #
