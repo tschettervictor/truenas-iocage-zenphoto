@@ -23,7 +23,7 @@ SERVER path. For these cases you will need to implement the path overrides below
 ////////////////////////////////////////////////////////////////////////////////
 // Database Information
 ////////////////////////////////////////////////////////////////////////////////
-$conf['db_software'] = 'mySQLi';		// preferred database
+$conf['db_software'] = 'MySQLi';		// preferred database
 /** for historical reasons these fields reference mysql even though the database **
  ** might be a different software                                                **/
 $conf['mysql_user'] = 'zenphoto_db_user';           // Supply your Database user id.
@@ -32,7 +32,7 @@ $conf['mysql_host'] = 'localhost';  // Supply the name of your Database server.
 $conf['mysql_database'] = 'zenphoto_db';       // Supply the name of Zenphoto's database
 $conf['mysql_prefix'] = 'zp_'; // If you're sharing the database with other tables, use a prefix to be safe.
 $conf['mysql_port'] = "3306"; // Change if your server uses a different port
-$conf['mysql_socket'] = "";
+$conf['mysql_socket'] = "zenphoto_db_socket";
 
 // If you are having problems with displaying some characters you may have to change
 // the following:
