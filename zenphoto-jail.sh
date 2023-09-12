@@ -183,7 +183,7 @@ rm /tmp/pkg.json
 #chown -R 88:88 "${DB_PATH}"/
 iocage exec "${JAIL_NAME}" mkdir -p /var/db/mysql
 iocage exec "${JAIL_NAME}" mkdir -p /mnt/includes
-#iocage exec "${JAIL_NAME}" mkdir -p /usr/local/www
+iocage exec "${JAIL_NAME}" mkdir -p /usr/local/www/zenphoto
 iocage exec "${JAIL_NAME}" mkdir -p /usr/local/etc/rc.d
 #iocage fstab -a "${JAIL_NAME}" "${DB_PATH}"/"${DATABASE}" /var/db/mysql nullfs rw 0 0
 iocage fstab -a "${JAIL_NAME}" "${INCLUDES_PATH}" /mnt/includes nullfs rw 0 0
@@ -195,8 +195,8 @@ iocage fstab -a "${JAIL_NAME}" "${INCLUDES_PATH}" /mnt/includes nullfs rw 0 0
 #####
 
 iocage exec "${JAIL_NAME}" fetch -o /tmp https://github.com/zenphoto/zenphoto/archive/v1.6.tar.gz
-iocage exec "${JAIL_NAME}" tar xjf /tmp/v"${ZP_VERSION}".tar.gz -C /usr/local/
-iocage exec "${JAIL_NAME}" mv /usr/local/zenphoto-"${ZP_VERSION}" /usr/local/www/zenphoto
+iocage exec "${JAIL_NAME}" tar xjf /tmp/v"${ZP_VERSION}".tar.gz -C /tmp/
+iocage exec "${JAIL_NAME}" mv /tmp/zenphoto-"${ZP_VERSION}" /usr/local/www/zenphoto
 
 #####
 #
