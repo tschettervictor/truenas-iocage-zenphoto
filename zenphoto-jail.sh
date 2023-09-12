@@ -176,7 +176,7 @@ cat <<__EOF__ >/tmp/pkg.json
   "php82-intl",
   "php82-mbstring",
   "php82-mysqli",
-  "php82-pdo_mysql
+  "php82-pdo_mysql",
   "php82-session",
   "php82-simplexml",
   "php82-tidy",
