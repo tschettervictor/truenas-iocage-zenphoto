@@ -20,8 +20,9 @@ JAIL_INTERFACES=""
 DEFAULT_GW_IP=""
 INTERFACE="vnet0"
 VNET="on"
-#POOL_PATH=""
-#DB_PATH=""
+POOL_PATH=""
+DB_PATH=""
+ALBUM_PATH=""
 JAIL_NAME="zenphoto"
 HOST_NAME=""
 SELFSIGNED_CERT=0
@@ -73,10 +74,10 @@ if [ -z "${DEFAULT_GW_IP}" ]; then
   echo 'Configuration error: DEFAULT_GW_IP must be set'
   exit 1
 fi
-#if [ -z "${POOL_PATH}" ]; then
- # echo 'Configuration error: POOL_PATH must be set'
-  #exit 1
-#fi
+if [ -z "${POOL_PATH}" ]; then
+  echo 'Configuration error: POOL_PATH must be set'
+  exit 1
+fi
 if [ -z "${HOST_NAME}" ]; then
   echo 'Configuration error: HOST_NAME must be set'
   exit 1
@@ -108,18 +109,16 @@ if [ $STANDALONE_CERT -eq 1 ] && [ "${CERT_EMAIL}" = "" ] ; then
   echo "CERT_EMAIL must be set when using Let's Encrypt certs."
   exit 1
 fi
-
 # If DB_PATH wasn't set, set it
-#if [ -z "${DB_PATH}" ]; then
-#  DB_PATH="${POOL_PATH}"/zenphoto/db
-#fi
-
+if [ -z "${DB_PATH}" ]; then
+  DB_PATH="${POOL_PATH}"/zenphoto/db
+fi
 # Sanity check DB_PATH must be different from POOL_PATH
-#if [ "${DB_PATH}" = "${POOL_PATH}" ]
-#then
-#  echo "DB_PATH must be different from POOL_PATH!"
-#  exit 1
-#fi
+if [ "${DB_PATH}" = "${POOL_PATH}" ]
+then
+  echo "DB_PATH must be different from POOL_PATH!"
+  exit 1
+fi
 
 # Extract IP and netmask, sanity check netmask
 IP=$(echo ${JAIL_IP} | cut -f1 -d/)
@@ -202,13 +201,15 @@ rm /tmp/pkg.json
 #
 #####
 
-#mkdir -p "${DB_PATH}"/"${DATABASE}"
-#chown -R 88:88 "${DB_PATH}"/
+mkdir -p "${DB_PATH}"/"${DATABASE}"
+chown -R 88:88 "${DB_PATH}"/
 iocage exec "${JAIL_NAME}" mkdir -p /var/db/mysql
 iocage exec "${JAIL_NAME}" mkdir -p /mnt/includes
-iocage exec "${JAIL_NAME}" mkdir -p /usr/local/www/zenphoto
+iocage exec "${JAIL_NAME}" mkdir -p /usr/local/www/zenphoto/albums
 iocage exec "${JAIL_NAME}" mkdir -p /usr/local/etc/rc.d
-#iocage fstab -a "${JAIL_NAME}" "${DB_PATH}"/"${DATABASE}" /var/db/mysql nullfs rw 0 0
+iocage fstab -a "${JAIL_NAME}"
+iocage fstab -a "${JAIL_NAME}" "${POOL_PATH}"/
+iocage fstab -a "${JAIL_NAME}" "${DB_PATH}"/"${DATABASE}" /var/db/mysql nullfs rw 0 0
 iocage fstab -a "${JAIL_NAME}" "${INCLUDES_PATH}" /mnt/includes nullfs rw 0 0
 
 #####
