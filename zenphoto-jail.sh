@@ -245,16 +245,20 @@ fi
 #
 #####
 
-iocage exec "${JAIL_NAME}" fetch -o /tmp https://github.com/zenphoto/zenphoto/archive/v1.6.tar.gz
-iocage exec "${JAIL_NAME}" tar xjf /tmp/v"${ZP_VERSION}".tar.gz -C /tmp/
+FILE="v${ZP_VERSION}.tar.gz"
+iocage exec "${JAIL_NAME}" fetch -o /tmp https://github.com/zenphoto/zenphoto/archive/"${FILE}"
+iocage exec "${JAIL_NAME}" tar xjf /tmp/"${FILE}" -C /tmp/
 iocage exec "${JAIL_NAME}" mv -f /tmp/zenphoto-"${ZP_VERSION}" /usr/local/www/zenphoto
-iocage exec "${JAIL_NAME}" rm /tmp/zenphoto-"${ZP_VERSION}"
+iocage exec "${JAIL_NAME}" rm /tmp/"${FILE}"
 iocage exec "${JAIL_NAME}" cp -f /mnt/includes/zenphoto.cfg.php /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php.bak
 iocage exec "${JAIL_NAME}" cp -f /mnt/includes/zenphoto.cfg.php /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
 iocage exec "${JAIL_NAME}" sed -i '' "s/zenphoto_db_user/${DB_USER}/" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
 iocage exec "${JAIL_NAME}" sed -i '' "s/zenphoto_db_pass/${DB_PASSWORD}/" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
 iocage exec "${JAIL_NAME}" sed -i '' "s/zenphoto_db/${DB_NAME}/" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
 iocage exec "${JAIL_NAME}" chown -R www:www /usr/local/www/zenphoto
+iocage exec "${JAIL_NAME}" chmod 0600 setup.log
+iocage exec "${JAIL_NAME}" chmod 0600 debug.log
+iocage exec "${JAIL_NAME}" chmod 0600 zenphoto.cfg.php
 
 #####
 #
