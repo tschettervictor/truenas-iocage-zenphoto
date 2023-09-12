@@ -251,9 +251,9 @@ iocage exec "${JAIL_NAME}" mv -f /tmp/zenphoto-"${ZP_VERSION}" /usr/local/www/ze
 iocage exec "${JAIL_NAME}" rm /tmp/zenphoto-"${ZP_VERSION}"
 iocage exec "${JAIL_NAME}" cp -f /mnt/includes/zenphoto.cfg.php /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php.bak
 iocage exec "${JAIL_NAME}" cp -f /mnt/includes/zenphoto.cfg.php /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
-iocage exec "${JAIL_NAME}" sed -i '' "s/zenphoto_db/${DB_NAME}/" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
 iocage exec "${JAIL_NAME}" sed -i '' "s/zenphoto_db_user/${DB_USER}/" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
 iocage exec "${JAIL_NAME}" sed -i '' "s/zenphoto_db_pass/${DB_PASSWORD}/" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
+iocage exec "${JAIL_NAME}" sed -i '' "s/zenphoto_db/${DB_NAME}/" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
 
 #####
 #
