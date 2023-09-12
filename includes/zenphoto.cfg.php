@@ -26,10 +26,10 @@ SERVER path. For these cases you will need to implement the path overrides below
 $conf['db_software'] = 'pdo_mysql';		// preferred database
 /** for historical reasons these fields reference mysql even though the database **
  ** might be a different software                                                **/
-$conf['mysql_user'] = 'zenphotodbuser';           // Supply your Database user id.
-$conf['mysql_pass'] = 'zenphotodbpass';           // Supply your Database password.
+$conf['mysql_user'] = 'zenphoto_db_user';           // Supply your Database user id.
+$conf['mysql_pass'] = 'zenphoto_db_pass';           // Supply your Database password.
 $conf['mysql_host'] = 'localhost';  // Supply the name of your Database server.
-$conf['mysql_database'] = 'zenphotodb';       // Supply the name of Zenphoto's database
+$conf['mysql_database'] = 'zenphoto_db';       // Supply the name of Zenphoto's database
 $conf['mysql_prefix'] = 'zp_'; // If you're sharing the database with other tables, use a prefix to be safe.
 $conf['mysql_port'] = "3306"; // Change if your server uses a different port
 $conf['mysql_socket'] = "";
