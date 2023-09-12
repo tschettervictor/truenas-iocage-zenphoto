@@ -216,8 +216,8 @@ iocage fstab -a "${JAIL_NAME}" "${INCLUDES_PATH}" /mnt/includes nullfs rw 0 0
 #####
 
 iocage exec "${JAIL_NAME}" fetch -o /tmp https://github.com/zenphoto/zenphoto/archive/v1.6.tar.gz
-iocage exec "${JAIL_NAME}" tar xjf /tmp/v"${ZP_VERSION}".tar.gz -C /tmp/
-iocage exec "${JAIL_NAME}" cp -f /tmp/zenphoto-"${ZP_VERSION}" /usr/local/www/zenphoto
+iocage exec "${JAIL_NAME}" tar xjf /tmp/v"${ZP_VERSION}".tar.gz -C /usr/local/www/
+iocage exec "${JAIL_NAME}" mv -f /usr/local/www/zenphoto-"${ZP_VERSION}" /usr/local/www/zenphoto
 
 #####
 #
