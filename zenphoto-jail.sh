@@ -160,7 +160,14 @@ cat <<__EOF__ >/tmp/pkg.json
   "go",
   "mariadb106-server",
   "mariadb106-client",
-  "mysql-connector-java"
+  "mysql-connector-java",
+  "php83",
+  "php83-gd",
+  "php83-gettext",
+  "php83-mbstring",
+  "php83-mysqli",
+  "php83-session",
+  "zenphoto-php83"
   ]
 }
 __EOF__
@@ -196,7 +203,7 @@ iocage fstab -a "${JAIL_NAME}" "${INCLUDES_PATH}" /mnt/includes nullfs rw 0 0
 
 iocage exec "${JAIL_NAME}" fetch -o /tmp https://github.com/zenphoto/zenphoto/archive/v1.6.tar.gz
 iocage exec "${JAIL_NAME}" tar xjf /tmp/v"${ZP_VERSION}".tar.gz -C /tmp/
-iocage exec "${JAIL_NAME}" mv /tmp/zenphoto-"${ZP_VERSION}" /usr/local/www/zenphoto
+iocage exec "${JAIL_NAME}" cp -f /tmp/zenphoto-"${ZP_VERSION}" /usr/local/www/zenphoto
 
 #####
 #
