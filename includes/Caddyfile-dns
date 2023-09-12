@@ -5,10 +5,10 @@
 
 yourhostnamehere {
 
-  root * /usr/local/www/zenphoto
-  file_server
+	root * /usr/local/www/zenphoto
+	file_server
 
-  php_fastcgi 127.0.0.1:9000
+	php_fastcgi 127.0.0.1:9000
   
 	tls {
 		dns dns_plugin api_token
@@ -17,5 +17,16 @@ yourhostnamehere {
 	log {
 		output file /var/log/yourhostnamehere.log
 	}
+
+	@forbidden {
+		path /.htaccess
+		path *.cfg
+		path *.log
+		path *.php
+		path *.zdb
+		paht *.xxx
+	}
+
+	respond @forbidden 403
 
 }
