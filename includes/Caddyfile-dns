@@ -27,6 +27,6 @@ yourhostnamehere {
 		paht *.xxx
 	}
 
-	respond @forbidden 403
+	respond @forbidden 404
 
 }
