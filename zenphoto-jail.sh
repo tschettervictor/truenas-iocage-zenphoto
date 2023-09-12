@@ -37,7 +37,7 @@ DB_ROOT_PASSWORD=$(openssl rand -base64 15)
 DB_PASSWORD=$(openssl rand -base64 15)
 ZP_VERSION="1.6"
 
-# Check for guacamole-config and set configuration
+# Check for zenphoto-config and set configuration
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "${SCRIPT}")
 if ! [ -e "${SCRIPTPATH}"/"${CONFIG_NAME}" ]; then
@@ -213,6 +213,33 @@ iocage fstab -a "${JAIL_NAME}" "${INCLUDES_PATH}" /mnt/includes nullfs rw 0 0
 
 #####
 #
+# Database Creation
+#
+#####
+
+if [ "${REINSTALL}" == "true" ]; then
+	echo "You did a reinstall, please use your old database credentials."
+ 	iocage exec "${JAIL_NAME}" cp -f /mnt/includes/my.cnf /root/.my.cnf
+  	iocage exec "${JAIL_NAME}" sed -i '' "s|mypassword|${DB_ROOT_PASSWORD}|" /root/.my.cnf
+else
+	if ! iocage exec "${JAIL_NAME}" mysql -u root -e "CREATE DATABASE ${DB_NAME};"; then
+		echo "Failed to create MariaDB database, aborting"
+		exit 1
+	fi
+		iocage exec "${JAIL_NAME}" mysql -u root -e "GRANT ALL ON ${DB_NAME}.* TO '${DB_USER}'@localhost IDENTIFIED BY '${DB_PASSWORD}';"
+		iocage exec "${JAIL_NAME}" mysql -u root -e "DELETE FROM mysql.user WHERE User='';"
+		iocage exec "${JAIL_NAME}" mysql -u root -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
+		iocage exec "${JAIL_NAME}" mysql -u root -e "DROP DATABASE IF EXISTS test;"
+		iocage exec "${JAIL_NAME}" mysql -u root -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';"
+		iocage exec "${JAIL_NAME}" mysql -u root -e "FLUSH PRIVILEGES;"
+		iocage exec "${JAIL_NAME}" mysqladmin --user=root password "${DB_ROOT_PASSWORD}" reload
+		iocage exec "${JAIL_NAME}" cp -f /mnt/includes/my.cnf /root/.my.cnf
+		iocage exec "${JAIL_NAME}" sed -i '' "s|mypassword|${DB_ROOT_PASSWORD}|" /root/.my.cnf
+		iocage exec "${JAIL_NAME}" "cat /tmp/guacamole-auth-jdbc-*/mysql/schema/*.sql | mysql -u root -p"${DB_ROOT_PASSWORD}" ${DB_NAME}"
+fi
+
+#####
+#
 # Zenphoto Install
 #
 #####
@@ -221,6 +248,11 @@ iocage exec "${JAIL_NAME}" fetch -o /tmp https://github.com/zenphoto/zenphoto/ar
 iocage exec "${JAIL_NAME}" tar xjf /tmp/v"${ZP_VERSION}".tar.gz -C /tmp/
 iocage exec "${JAIL_NAME}" mv -f /tmp/zenphoto-"${ZP_VERSION}" /usr/local/www/zenphoto
 iocage exec "${JAIL_NAME}" rm /tmp/zenphoto-"${ZP_VERSION}"
+iocage exec "${JAIL_NAME}" cp -f /mnt/includes/zenphoto.cfg.php /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php.bak
+iocage exec "${JAIL_NAME}" cp -f /mnt/includes/zenphoto.cfg.php /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
+iocage exec "${JAIL_NAME}" sed -i '' "s/zenphotodb/${DB_NAME}/" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
+iocage exec "${JAIL_NAME}" sed -i '' "s/zenphotodbuser/${DB_USER}/" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
+iocage exec "${JAIL_NAME}" sed -i '' "s/zenphotodbpass/${DB_PASSWORD}/" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
 
 #####
 #
