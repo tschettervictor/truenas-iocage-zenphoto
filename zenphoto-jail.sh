@@ -167,6 +167,20 @@ cat <<__EOF__ >/tmp/pkg.json
   "php83-mbstring",
   "php83-mysqli",
   "php83-session",
+  "php83-tidy",
+  "php83-zip",
+  "php83-exif",
+  "php83-bz2",
+  "php83-fileinfo",
+  "php83-intl",
+  "php83-xml",
+  "php83-xmlreader",
+  "php83-xmlwriter",
+  "php83-dom",
+  "php83-simplexml",
+  "php83-ctype",
+  "php83-filter",
+  "php83-mbstring",
   "zenphoto-php83"
   ]
 }
@@ -268,6 +282,7 @@ iocage exec "${JAIL_NAME}" sed -i '' "s/api_token/${DNS_TOKEN}/" /usr/local/www/
 iocage exec "${JAIL_NAME}" sed -i '' "s/youremailhere/${CERT_EMAIL}/" /usr/local/www/Caddyfile
 iocage exec "${JAIL_NAME}" sysrc caddy_config="/usr/local/www/Caddyfile"
 iocage exec "${JAIL_NAME}" sysrc caddy_enable="YES"
+iocage exec "${JAIL_NAME}" sysrc php_fpm_enable="YES"
 
 # Don't need /mnt/includes any more, so unmount it
 iocage fstab -r "${JAIL_NAME}" "${INCLUDES_PATH}" /mnt/includes nullfs rw 0 0
