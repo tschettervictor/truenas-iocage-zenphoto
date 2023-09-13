@@ -372,9 +372,9 @@ elif [ $SELFSIGNED_CERT -eq 1 ]; then
   echo "---------------"
 fi
 if [ $NO_CERT -eq 1 ]; then
-  echo "Using your web browser, go to http://${HOST_NAME} to start setup"
+  echo "Using your web browser, go to http://${HOST_NAME}/zp-core/setup to start setup"
 else
-  echo "Using your web browser, go to https://${HOST_NAME} to start setup"
+  echo "Using your web browser, go to https://${HOST_NAME}/zp-core/setup to start setup"
 fi
 if [ "${REINSTALL}" == "true" ]; then
 	echo "---------------"
