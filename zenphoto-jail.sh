@@ -260,10 +260,10 @@ if [ "${REINSTALL}" == "true" ]; then
  	iocage exec "${JAIL_NAME}" cp -R -f /tmp/zenphoto-"${ZP_VERSION}"/themes /usr/local/www/zenphoto/
  	iocage exec "${JAIL_NAME}" cp -f /tmp/zenphoto-"${ZP_VERSION}"/index.php /usr/local/www/zenphoto/index.php
   	iocage exec "${JAIL_NAME}" chown -R www:www /usr/local/www/zenphoto
- 	iocage exec "${JAIL_NAME}" rm /tmp/"${FILE}"
+ 	iocage exec "${JAIL_NAME}" rm /tmp/"${FILE}" /tmp/zenphoto-"${ZP_VERSION}"
 else
 	iocage exec "${JAIL_NAME}" cp -r -f /tmp/zenphoto-"${ZP_VERSION}"/ /usr/local/www/zenphoto/
-	iocage exec "${JAIL_NAME}" rm /tmp/"${FILE}"
+	iocage exec "${JAIL_NAME}" rm /tmp/"${FILE}" /tmp/zenphoto-"${ZP_VERSION}"
 	iocage exec "${JAIL_NAME}" cp -f /mnt/includes/zenphoto.cfg.php /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php.bak
 	iocage exec "${JAIL_NAME}" cp -f /mnt/includes/zenphoto.cfg.php /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
 	iocage exec "${JAIL_NAME}" sed -i '' "s/zenphoto_db_user/${DB_USER}/" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
