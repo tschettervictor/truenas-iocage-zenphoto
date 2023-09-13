@@ -267,10 +267,8 @@ iocage exec "${JAIL_NAME}" fetch -o /tmp https://github.com/zenphoto/zenphoto/ar
 iocage exec "${JAIL_NAME}" tar xjf /tmp/"${FILE}" -C /tmp/
 
 if [ "${REINSTALL}" == "true" ]; then
-	iocage exec "${JAIL_NAME}" rm -R /usr/local/www/zenphoto/zp-core
-	iocage exec "${JAIL_NAME}" cp -r -f /tmp/zenphoto-"${ZP_VERSION}"/zp-core /usr/local/www/zenphoto
- 	iocage exec "${JAIL_NAME}" cp -r -f /tmp/zenphoto-"${ZP_VERSION}"/themes/ /usr/local/www/zenphoto/themes
-	iocage exec "${JAIL_NAME}" cp -f /tmp/zenphoto-"${ZP_VERSION}"/index.php /usr/local/www/zenphoto/index.php
+	iocage exec "${JAIL_NAME}" cp -r /tmp/zenphoto-"${ZP_VERSION}"/ /usr/local/www/zenphoto
+ 	iocage exec "${JAIL_NAME}" cp -f /tmp/zenphoto-"${ZP_VERSION}"/index.php /usr/local/www/zenphoto/index.php
  	iocage exec "${JAIL_NAME}" rm /tmp/"${FILE}"
 else
 		iocage exec "${JAIL_NAME}" cp -r -f /tmp/zenphoto-"${ZP_VERSION}"/ /usr/local/www/zenphoto/
