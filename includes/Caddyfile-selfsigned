@@ -17,7 +17,7 @@ yourhostnamehere {
 		path *.log
 		path *.php
 		path *.zdb
-		paht *.xxx
+		path *.xxx
 	}
 
 	respond @forbidden 404
