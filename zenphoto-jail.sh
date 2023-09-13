@@ -115,19 +115,13 @@ fi
 if [ -z "${DB_PATH}" ]; then
   DB_PATH="${POOL_PATH}"/zenphoto/db
 fi
-if [ -z "${CONFIG_PATH}" ]; then
-  CONFIG_PATH="${POOL_PATH}"/zenphoto/config
-fi
-if [ -z "${ALBUMS_PATH}" ]; then
-  ALBUMS_PATH="${POOL_PATH}"/zenphoto/albums
-fi
-if [ -z "${THEMES_PATH}" ]; then
-  THEMES_PATH="${POOL_PATH}"/zenphoto/themes
+if [ -z "${DATA_PATH}" ]; then
+  DATA_PATH="${POOL_PATH}"/zenphoto/data
 fi
 # Sanity check DB_PATH, ALBUMS_PATH, CONFIG_PATH and POOL_PATH
-if [ "${DB_PATH}" = "${DATA_PATH}" ] || [ "${DB_PATH}" = "${CONFIG_PATH}" ] || [ "${DB_PATH}" = "${THEMES_PATH}" ] || [ "${DB_PATH}" = "${POOL_PATH}" ] || [ "${ALBUMS_PATH}" = "${CONFIG_PATH}" ] || [ "${ALBUMS_PATH}" = "${THEMES_PATH}" ] || [ "${ALBUMS_PATH}" = "${POOL_PATH}" ] || [ "${CONFIG_PATH}" = "${THEMES_PATH}" ] || [ "${CONFIG_PATH}" = "${POOL_PATH}" ] || [ "${THEMES_PATH}" = "${POOL_PATH}" ]
+if [ "${DB_PATH}" = "${DATA_PATH}" ] || [ "${DB_PATH}" = "${DATA_PATH}" ] || [ "${DB_PATH}" = "${POOL_PATH}" ] || [ "${DATA_PATH}" = "${POOL_PATH}" ]
 then 
-  echo "DB_PATH, CONFIG_PATH, ALBUMS_PATH, and POOL_PATH must be different from each other!"
+  echo "DB_PATH, DATA_PATH, and POOL_PATH must be different from each other!"
   exit 1
 fi
 
@@ -213,18 +207,12 @@ rm /tmp/pkg.json
 
 mkdir -p "${DB_PATH}"/"${DATABASE}"
 chown -R 88:88 "${DB_PATH}"/
-mkdir -p "${POOL_PATH}"/zenphoto/config
-mkdir -p "${POOL_PATH}"/zenphoto/albums
-mkdir -p "${POOL_PATH}"/zenphoto/themes
+mkdir -p "${POOL_PATH}"/zenphoto/data
 iocage exec "${JAIL_NAME}" mkdir -p /var/db/mysql
 iocage exec "${JAIL_NAME}" mkdir -p /mnt/includes
-iocage exec "${JAIL_NAME}" mkdir -p /usr/local/www/zenphoto/zp-data
-iocage exec "${JAIL_NAME}" mkdir -p /usr/local/www/zenphoto/albums
-iocage exec "${JAIL_NAME}" mkdir -p /usr/local/www/zenphoto/themes
+iocage exec "${JAIL_NAME}" mkdir -p /usr/local/www/zenphoto
 iocage exec "${JAIL_NAME}" mkdir -p /usr/local/etc/rc.d
-iocage fstab -a "${JAIL_NAME}" "${CONFIG_PATH}" /usr/local/www/zenphoto/zp-data nullfs rw 0 0
-iocage fstab -a "${JAIL_NAME}" "${ALBUMS_PATH}" /usr/local/www/zenphoto/albums nullfs rw 0 0
-iocage fstab -a "${JAIL_NAME}" "${THEMES_PATH}" /usr/local/www/zenphoto/themes nullfs rw 0 0
+iocage fstab -a "${JAIL_NAME}" "${DATA_PATH}" /usr/local/www/zenphoto nullfs rw 0 0
 iocage fstab -a "${JAIL_NAME}" "${DB_PATH}"/"${DATABASE}" /var/db/mysql nullfs rw 0 0
 iocage fstab -a "${JAIL_NAME}" "${INCLUDES_PATH}" /mnt/includes nullfs rw 0 0
 
@@ -267,7 +255,9 @@ iocage exec "${JAIL_NAME}" fetch -o /tmp https://github.com/zenphoto/zenphoto/ar
 iocage exec "${JAIL_NAME}" tar xjf /tmp/"${FILE}" -C /tmp/
 
 if [ "${REINSTALL}" == "true" ]; then
-	iocage exec "${JAIL_NAME}" cp -r /tmp/zenphoto-"${ZP_VERSION}"/ /usr/local/www/zenphoto
+	iocage exec "${JAIL_NAME}" cp -R -f /tmp/zenphoto-"${ZP_VERSION}"/zp-core /usr/local/www/zenphoto/
+ 	iocage exec "${JAIL_NAME}" cp -R /usr/local/www/zenphoto/themes /usr/local/www/zenphoto/themes.bak
+ 	iocage exec "${JAIL_NAME}" cp -R -f /tmp/zenphoto-"${ZP_VERSION}"/themes /usr/local/www/zenphoto/
  	iocage exec "${JAIL_NAME}" cp -f /tmp/zenphoto-"${ZP_VERSION}"/index.php /usr/local/www/zenphoto/index.php
  	iocage exec "${JAIL_NAME}" rm /tmp/"${FILE}"
 else
