@@ -275,6 +275,7 @@ if [ "${REINSTALL}" == "true" ]; then
 else
 		iocage exec "${JAIL_NAME}" cp -r -f /tmp/zenphoto-"${ZP_VERSION}"/ /usr/local/www/zenphoto/
 		iocage exec "${JAIL_NAME}" rm /tmp/"${FILE}"
+  		iocage exec "${JAIL_NAME}" cp -f /mnt/includes/.htaccess /usr/local/www/zenphoto/zp-data
 		iocage exec "${JAIL_NAME}" cp -f /mnt/includes/zenphoto.cfg.php /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php.bak
 		iocage exec "${JAIL_NAME}" cp -f /mnt/includes/zenphoto.cfg.php /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
 		iocage exec "${JAIL_NAME}" sed -i '' "s/zenphoto_db_user/${DB_USER}/" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
