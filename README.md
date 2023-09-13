@@ -73,4 +73,4 @@ Visit the [Caddy download page](https://caddyserver.com/download) to see the DNS
 
 ### Notes
 - Reinstalls work as expected when the previous database is present.
-- Reinstalling replaces the 'zp-core', 'themes' and 'index.php' files according to the documentation. If you have modified a theme or installed a custom theme, please be sure to back them up before reinstalling.
+- Reinstalling replaces the 'zp-core' and 'themes' directories, and the 'index.php' file according to the documentation. If you have modified a theme or installed a custom theme, please be sure to back them up before reinstalling.
