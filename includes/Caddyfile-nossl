@@ -13,7 +13,6 @@ yourhostnamehere:80, jail_ip:80 {
 		path /.htaccess
 		path *.cfg
 		path *.log
-		path *.php
 		path *.zdb
 		path *.xxx
 	}
