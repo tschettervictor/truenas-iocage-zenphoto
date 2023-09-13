@@ -262,10 +262,10 @@ if [ "${REINSTALL}" == "true" ]; then
  	iocage exec "${JAIL_NAME}" cp -R -f /tmp/zenphoto-"${ZP_VERSION}"/themes /usr/local/www/zenphoto/themes
  	iocage exec "${JAIL_NAME}" cp -f /tmp/zenphoto-"${ZP_VERSION}"/index.php /usr/local/www/zenphoto/index.php
   	iocage exec "${JAIL_NAME}" chown -R www:www /usr/local/www/zenphoto
- 	iocage exec "${JAIL_NAME}" rm /tmp/"${FILE}" /tmp/zenphoto-"${ZP_VERSION}"
+ 	iocage exec "${JAIL_NAME}" rm -R /tmp/"${FILE}" /tmp/zenphoto-"${ZP_VERSION}"
 else
 	iocage exec "${JAIL_NAME}" cp -r -f /tmp/zenphoto-"${ZP_VERSION}"/ /usr/local/www/zenphoto/
-	iocage exec "${JAIL_NAME}" rm /tmp/"${FILE}" /tmp/zenphoto-"${ZP_VERSION}"
+	iocage exec "${JAIL_NAME}" rm -R /tmp/"${FILE}" /tmp/zenphoto-"${ZP_VERSION}"
 	iocage exec "${JAIL_NAME}" cp -f /mnt/includes/zenphoto.cfg.php /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php.bak
 	iocage exec "${JAIL_NAME}" cp -f /mnt/includes/zenphoto.cfg.php /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
 	iocage exec "${JAIL_NAME}" sed -i '' "s/zenphoto_db_user/${DB_USER}/" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
@@ -376,17 +376,17 @@ if [ $NO_CERT -eq 1 ]; then
 else
   echo "Using your web browser, go to https://${HOST_NAME} to start setup"
 fi
-echo "---------------"
-echo "Database Information"
-echo "MySQL Username: root"
-echo "MySQL Password: $DB_ROOT_PASSWORD"
-echo "Zenphoto DB User: $DB_USER"
-echo "Zenphoto DB Password: "$DB_PASSWORD""
 if [ "${REINSTALL}" == "true" ]; then
 	echo "---------------"
 	echo "You did a reinstall, please user your old credentials to log in."
 else
 	echo "---------------"
+        echo "Database Information"
+        echo "MySQL Username: root"
+        echo "MySQL Password: $DB_ROOT_PASSWORD"
+        echo "Zenphoto DB User: $DB_USER"
+        echo "Zenphoto DB Password: "$DB_PASSWORD""
+        echo "---------------"
 	echo "User Information"
 	echo "Admin user is created on setup."
 fi
