@@ -15,7 +15,6 @@ yourhostnamehere {
 		path /.htaccess
 		path *.cfg
 		path *.log
-		path *.php
 		path *.zdb
 		path *.xxx
 	}
