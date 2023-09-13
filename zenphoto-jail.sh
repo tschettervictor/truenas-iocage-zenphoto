@@ -21,10 +21,7 @@ DEFAULT_GW_IP=""
 INTERFACE="vnet0"
 VNET="on"
 POOL_PATH=""
-DB_PATH=""
-CONFIG_PATH=""
-ALBUMS_PATH=""
-THEMES_PATH=""
+DATA_PATH=""
 JAIL_NAME="zenphoto"
 HOST_NAME=""
 SELFSIGNED_CERT=0
@@ -257,7 +254,7 @@ iocage exec "${JAIL_NAME}" tar xjf /tmp/"${FILE}" -C /tmp/
 if [ "${REINSTALL}" == "true" ]; then
 	iocage exec "${JAIL_NAME}" rm -R /usr/local/www/zenphoto/zp-core
 	iocage exec "${JAIL_NAME}" cp -R -f /tmp/zenphoto-"${ZP_VERSION}"/zp-core /usr/local/www/zenphoto/
- 	iocage exec "${JAIL_NAME}" cp -R /usr/local/www/zenphoto/themes /usr/local/www/zenphoto/themes.bak
+ 	iocage exec "${JAIL_NAME}" cp -R /usr/local/www/zenphoto/themes/ /usr/local/www/zenphoto/themes.bak
   	iocage exec "${JAIL_NAME}" rm -R /usr/local/www/zenphoto/themes
  	iocage exec "${JAIL_NAME}" cp -R -f /tmp/zenphoto-"${ZP_VERSION}"/themes /usr/local/www/zenphoto/themes
  	iocage exec "${JAIL_NAME}" cp -f /tmp/zenphoto-"${ZP_VERSION}"/index.php /usr/local/www/zenphoto/index.php
