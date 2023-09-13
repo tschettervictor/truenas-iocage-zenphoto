@@ -209,9 +209,9 @@ chown -R 88:88 "${DB_PATH}"/
 mkdir -p "${POOL_PATH}"/zenphoto/data
 iocage exec "${JAIL_NAME}" mkdir -p /var/db/mysql
 iocage exec "${JAIL_NAME}" mkdir -p /mnt/includes
-iocage exec "${JAIL_NAME}" mkdir -p /usr/local/www/zenphoto/zp-data
+iocage exec "${JAIL_NAME}" mkdir -p /usr/local/www/zenphoto
 iocage exec "${JAIL_NAME}" mkdir -p /usr/local/etc/rc.d
-iocage fstab -a "${JAIL_NAME}" "${DATA_PATH}" /usr/local/www/zenphoto/zp-data nullfs rw 0 0
+iocage fstab -a "${JAIL_NAME}" "${DATA_PATH}" /usr/local/www/zenphoto nullfs rw 0 0
 iocage fstab -a "${JAIL_NAME}" "${DB_PATH}"/"${DATABASE}" /var/db/mysql nullfs rw 0 0
 iocage fstab -a "${JAIL_NAME}" "${INCLUDES_PATH}" /mnt/includes nullfs rw 0 0
 
