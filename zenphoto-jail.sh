@@ -268,9 +268,8 @@ iocage exec "${JAIL_NAME}" tar xjf /tmp/"${FILE}" -C /tmp/
 
 if [ "${REINSTALL}" == "true" ]; then
 	iocage exec "${JAIL_NAME}" rm -R /usr/local/www/zenphoto/zp-core
- 	iocage exec "${JAIL_NAME}" rm -R /usr/local/www/zenphoto/themes
-	iocage exec "${JAIL_NAME}" cp -r -f /tmp/zenphoto-"${ZP_VERSION}"/zp-core /usr/local/www/zenphoto/zp-core
- 	iocage exec "${JAIL_NAME}" cp -r -f /tmp/zenphoto-"${ZP_VERSION}"/themes /usr/local/www/zenphoto/themes
+	iocage exec "${JAIL_NAME}" cp -r -f /tmp/zenphoto-"${ZP_VERSION}"/zp-core /usr/local/www/zenphoto
+ 	iocage exec "${JAIL_NAME}" cp -r -f /tmp/zenphoto-"${ZP_VERSION}"/themes/ /usr/local/www/zenphoto/themes
 	iocage exec "${JAIL_NAME}" cp -f /tmp/zenphoto-"${ZP_VERSION}"/index.php /usr/local/www/zenphoto/index.php
  	iocage exec "${JAIL_NAME}" rm /tmp/"${FILE}"
 else
@@ -284,7 +283,6 @@ else
 		iocage exec "${JAIL_NAME}" sed -i '' "s/zenphoto_db/${DB_NAME}/" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
 		iocage exec "${JAIL_NAME}" touch /usr/local/www/zenphoto/zp-data/charset_tést
 		iocage exec "${JAIL_NAME}" chown -R www:www /usr/local/www/zenphoto
-#		iocage exec "${JAIL_NAME}" chmod -R 0600 /usr/local/www/zenphoto/zp-data
 fi
 
 #####
