@@ -171,7 +171,6 @@ cat <<__EOF__ >/tmp/pkg.json
   "mariadb106-server",
   "mariadb106-client",
   "mysql-connector-java",
-  "zenphoto-php82",
   "php82",
   "php82-bz2",
   "php82-ctype",
