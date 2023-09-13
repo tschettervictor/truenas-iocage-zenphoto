@@ -60,7 +60,7 @@ fi
 #
 #####
 
-# Check that necessary variables were set by guacamole-config
+# Check that necessary variables were set by zenphoto-config
 if [ -z "${JAIL_IP}" ]; then
   echo 'Configuration error: JAIL_IP must be set'
   exit 1
@@ -108,14 +108,14 @@ if [ $STANDALONE_CERT -eq 1 ] && [ "${CERT_EMAIL}" = "" ] ; then
   echo "CERT_EMAIL must be set when using Let's Encrypt certs."
   exit 1
 fi
-# If DB_PATH and ALBUMS_PATH weren't set, set them
+# If DB_PATH and DATA_PATH weren't set, set them
 if [ -z "${DB_PATH}" ]; then
   DB_PATH="${POOL_PATH}"/zenphoto/db
 fi
 if [ -z "${DATA_PATH}" ]; then
   DATA_PATH="${POOL_PATH}"/zenphoto/data
 fi
-# Sanity check DB_PATH, ALBUMS_PATH, CONFIG_PATH and POOL_PATH
+# Sanity check DB_PATH, DATA_PATH, and POOL_PATH
 if [ "${DB_PATH}" = "${DATA_PATH}" ] || [ "${DB_PATH}" = "${DATA_PATH}" ] || [ "${DB_PATH}" = "${POOL_PATH}" ] || [ "${DATA_PATH}" = "${POOL_PATH}" ]
 then 
   echo "DB_PATH, DATA_PATH, and POOL_PATH must be different from each other!"
