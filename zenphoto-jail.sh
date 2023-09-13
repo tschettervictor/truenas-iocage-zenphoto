@@ -259,6 +259,7 @@ if [ "${REINSTALL}" == "true" ]; then
  	iocage exec "${JAIL_NAME}" cp -R /usr/local/www/zenphoto/themes /usr/local/www/zenphoto/themes.bak
  	iocage exec "${JAIL_NAME}" cp -R -f /tmp/zenphoto-"${ZP_VERSION}"/themes /usr/local/www/zenphoto/
  	iocage exec "${JAIL_NAME}" cp -f /tmp/zenphoto-"${ZP_VERSION}"/index.php /usr/local/www/zenphoto/index.php
+  	iocage exec "${JAIL_NAME}" chown -R www:www /usr/local/www/zenphoto
  	iocage exec "${JAIL_NAME}" rm /tmp/"${FILE}"
 else
 		iocage exec "${JAIL_NAME}" cp -r -f /tmp/zenphoto-"${ZP_VERSION}"/ /usr/local/www/zenphoto/
@@ -273,6 +274,8 @@ else
 		iocage exec "${JAIL_NAME}" touch /usr/local/www/zenphoto/zp-data/charset_tést
 		iocage exec "${JAIL_NAME}" chown -R www:www /usr/local/www/zenphoto
 fi
+iocage exec "${JAIL_NAME}" cp -f /mnt/includes/php.ini /usr/local/etc/php.ini
+iocage exec "${JAIL_NAME}" chown -R www:www /usr/local/etc/php.ini
 
 #####
 #
