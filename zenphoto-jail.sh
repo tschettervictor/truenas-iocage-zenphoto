@@ -262,17 +262,16 @@ if [ "${REINSTALL}" == "true" ]; then
   	iocage exec "${JAIL_NAME}" chown -R www:www /usr/local/www/zenphoto
  	iocage exec "${JAIL_NAME}" rm /tmp/"${FILE}"
 else
-		iocage exec "${JAIL_NAME}" cp -r -f /tmp/zenphoto-"${ZP_VERSION}"/ /usr/local/www/zenphoto/
-		iocage exec "${JAIL_NAME}" rm /tmp/"${FILE}"
-  		iocage exec "${JAIL_NAME}" cp -f /mnt/includes/.htaccess /usr/local/www/zenphoto/zp-data
-		iocage exec "${JAIL_NAME}" cp -f /mnt/includes/zenphoto.cfg.php /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php.bak
-		iocage exec "${JAIL_NAME}" cp -f /mnt/includes/zenphoto.cfg.php /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
-		iocage exec "${JAIL_NAME}" sed -i '' "s/zenphoto_db_user/${DB_USER}/" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
-		iocage exec "${JAIL_NAME}" sed -i '' "s|zenphoto_db_pass|${DB_PASSWORD}|" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
-		iocage exec "${JAIL_NAME}" sed -i '' "s|zenphoto_db_socket|/var/run/mysql/mysql.sock|" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
-		iocage exec "${JAIL_NAME}" sed -i '' "s/zenphoto_db/${DB_NAME}/" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
-		iocage exec "${JAIL_NAME}" touch /usr/local/www/zenphoto/zp-data/charset_tést
-		iocage exec "${JAIL_NAME}" chown -R www:www /usr/local/www/zenphoto
+	iocage exec "${JAIL_NAME}" cp -r -f /tmp/zenphoto-"${ZP_VERSION}"/ /usr/local/www/zenphoto/
+	iocage exec "${JAIL_NAME}" rm /tmp/"${FILE}"
+	iocage exec "${JAIL_NAME}" cp -f /mnt/includes/zenphoto.cfg.php /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php.bak
+	iocage exec "${JAIL_NAME}" cp -f /mnt/includes/zenphoto.cfg.php /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
+	iocage exec "${JAIL_NAME}" sed -i '' "s/zenphoto_db_user/${DB_USER}/" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
+	iocage exec "${JAIL_NAME}" sed -i '' "s|zenphoto_db_pass|${DB_PASSWORD}|" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
+	iocage exec "${JAIL_NAME}" sed -i '' "s|zenphoto_db_socket|/var/run/mysql/mysql.sock|" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
+	iocage exec "${JAIL_NAME}" sed -i '' "s/zenphoto_db/${DB_NAME}/" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
+	iocage exec "${JAIL_NAME}" touch /usr/local/www/zenphoto/zp-data/charset_tést
+	iocage exec "${JAIL_NAME}" chown -R www:www /usr/local/www/zenphoto
 fi
 iocage exec "${JAIL_NAME}" cp -f /mnt/includes/php.ini /usr/local/etc/php.ini
 iocage exec "${JAIL_NAME}" chown -R www:www /usr/local/etc/php.ini
