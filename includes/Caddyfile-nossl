@@ -15,7 +15,7 @@ yourhostnamehere:80, jail_ip:80 {
 		path *.log
 		path *.php
 		path *.zdb
-		paht *.xxx
+		path *.xxx
 	}
 
 	respond @forbidden 404
