@@ -22,7 +22,8 @@ INTERFACE="vnet0"
 VNET="on"
 POOL_PATH=""
 DB_PATH=""
-ALBUM_PATH=""
+#ALBUMS_PATHS=""
+#CONFIG_PATH=""
 JAIL_NAME="zenphoto"
 HOST_NAME=""
 SELFSIGNED_CERT=0
@@ -109,14 +110,17 @@ if [ $STANDALONE_CERT -eq 1 ] && [ "${CERT_EMAIL}" = "" ] ; then
   echo "CERT_EMAIL must be set when using Let's Encrypt certs."
   exit 1
 fi
-# If DB_PATH wasn't set, set it
+# If DB_PATH and ALBUMS_PATH weren't set, set them
 if [ -z "${DB_PATH}" ]; then
   DB_PATH="${POOL_PATH}"/zenphoto/db
 fi
-# Sanity check DB_PATH must be different from POOL_PATH
-if [ "${DB_PATH}" = "${POOL_PATH}" ]
-then
-  echo "DB_PATH must be different from POOL_PATH!"
+if [ -z "${DATA_PATH}" ]; then
+  DATA_PATH="${POOL_PATH}"/zenphoto/data
+fi
+# Sanity check DB_PATH, ALBUMS_PATH, CONFIG_PATH and POOL_PATH
+if [ "${DB_PATH}" = "${DATA_PATH}" ] || [ "${DB_PATH}" = "${POOL_PATH}" ] || [ "${DATA_PATH}" = "${POOL_PATH}" ]
+then 
+  echo "DB_PATH, DATA_PATH, and POOL_PATH must be different from each other!"
   exit 1
 fi
 
@@ -203,12 +207,12 @@ rm /tmp/pkg.json
 
 mkdir -p "${DB_PATH}"/"${DATABASE}"
 chown -R 88:88 "${DB_PATH}"/
+mkdir -p "${POOL_PATH}"/zenphoto/data
 iocage exec "${JAIL_NAME}" mkdir -p /var/db/mysql
 iocage exec "${JAIL_NAME}" mkdir -p /mnt/includes
-iocage exec "${JAIL_NAME}" mkdir -p /usr/local/www/zenphoto/albums
+iocage exec "${JAIL_NAME}" mkdir -p /usr/local/www/zenphoto/zp-data
 iocage exec "${JAIL_NAME}" mkdir -p /usr/local/etc/rc.d
-iocage fstab -a "${JAIL_NAME}"
-iocage fstab -a "${JAIL_NAME}" "${POOL_PATH}"/
+iocage fstab -a "${JAIL_NAME}" "${DATA_PATH}" /usr/local/www/zenphoto/zp-data nullfs rw 0 0
 iocage fstab -a "${JAIL_NAME}" "${DB_PATH}"/"${DATABASE}" /var/db/mysql nullfs rw 0 0
 iocage fstab -a "${JAIL_NAME}" "${INCLUDES_PATH}" /mnt/includes nullfs rw 0 0
 
@@ -249,19 +253,30 @@ fi
 FILE="v${ZP_VERSION}.tar.gz"
 iocage exec "${JAIL_NAME}" fetch -o /tmp https://github.com/zenphoto/zenphoto/archive/"${FILE}"
 iocage exec "${JAIL_NAME}" tar xjf /tmp/"${FILE}" -C /tmp/
-iocage exec "${JAIL_NAME}" mv -f /tmp/zenphoto-"${ZP_VERSION}" /usr/local/www/zenphoto
-iocage exec "${JAIL_NAME}" rm /tmp/"${FILE}"
-iocage exec "${JAIL_NAME}" cp -f /mnt/includes/zenphoto.cfg.php /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php.bak
-iocage exec "${JAIL_NAME}" cp -f /mnt/includes/zenphoto.cfg.php /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
-iocage exec "${JAIL_NAME}" sed -i '' "s/zenphoto_db_user/${DB_USER}/" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
-iocage exec "${JAIL_NAME}" sed -i '' "s/zenphoto_db_pass/${DB_PASSWORD}/" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
-iocage exec "${JAIL_NAME}" sed -i '' "s|zenphoto_db_socket|/var/run/mysql/mysql.sock|" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
-iocage exec "${JAIL_NAME}" sed -i '' "s/zenphoto_db/${DB_NAME}/" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
-iocage exec "${JAIL_NAME}" touch /usr/local/www/zenphoto/zp-data/charset_tést
-iocage exec "${JAIL_NAME}" chown -R www:www /usr/local/www/zenphoto
-iocage exec "${JAIL_NAME}" chmod 0600 /usr/local/www/zenphoto/zp-data/setup.log
-iocage exec "${JAIL_NAME}" chmod 0600 /usr/local/www/zenphoto/zp-data/debug.log
-iocage exec "${JAIL_NAME}" chmod 0600 /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
+
+if [ "${REINSTALL}" == "true" ]; then
+	iocage exec "${JAIL_NAME}" rm -R /usr/local/www/zenphoto/zp-core
+ 	iocage exec "${JAIL_NAME}" rm -R /usr/local/www/zenphoto/themes
+	iocage exec "${JAIL_NAME}" rm /usr/local/www/zenphoto/index.php
+	iocage exec "${JAIL_NAME}" cp -f /tmp/zenphoto-"${ZP_VERSION}"/zp-core /usr/local/www/zenphoto/
+ 	iocage exec "${JAIL_NAME}" cp -f /tmp/zenphoto-"${ZP_VERSION}"/themes /usr/local/www/zenphoto/
+	iocage exec "${JAIL_NAME}" cp -f /tmp/zenphoto-"${ZP_VERSION}"/index.php /usr/local/www/zenphoto/index.php
+ 	iocage exec "${JAIL_NAME}" rm /tmp/"${FILE}"
+else
+	iocage exec "${JAIL_NAME}" mv /tmp/zenphoto-"${ZP_VERSION}" /usr/local/www/zenphoto
+	iocage exec "${JAIL_NAME}" rm /tmp/"${FILE}"
+	iocage exec "${JAIL_NAME}" cp -f /mnt/includes/zenphoto.cfg.php /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php.bak
+	iocage exec "${JAIL_NAME}" cp -f /mnt/includes/zenphoto.cfg.php /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
+	iocage exec "${JAIL_NAME}" sed -i '' "s/zenphoto_db_user/${DB_USER}/" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
+	iocage exec "${JAIL_NAME}" sed -i '' "s/zenphoto_db_pass/${DB_PASSWORD}/" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
+	iocage exec "${JAIL_NAME}" sed -i '' "s|zenphoto_db_socket|/var/run/mysql/mysql.sock|" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
+	iocage exec "${JAIL_NAME}" sed -i '' "s/zenphoto_db/${DB_NAME}/" /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
+	iocage exec "${JAIL_NAME}" touch /usr/local/www/zenphoto/zp-data/charset_tést
+	iocage exec "${JAIL_NAME}" chown -R www:www /usr/local/www/zenphoto
+	iocage exec "${JAIL_NAME}" chmod 0600 /usr/local/www/zenphoto/zp-data/setup.log
+	iocage exec "${JAIL_NAME}" chmod 0600 /usr/local/www/zenphoto/zp-data/debug.log
+	iocage exec "${JAIL_NAME}" chmod 0600 /usr/local/www/zenphoto/zp-data/zenphoto.cfg.php
+fi
 
 #####
 #
@@ -356,24 +371,23 @@ elif [ $SELFSIGNED_CERT -eq 1 ]; then
   echo "---------------"
 fi
 if [ $NO_CERT -eq 1 ]; then
-  echo "Using your web browser, go to http://${HOST_NAME} to log in"
+  echo "Using your web browser, go to http://${HOST_NAME} to start setup"
 else
-  echo "Using your web browser, go to https://${HOST_NAME} to log in"
+  echo "Using your web browser, go to https://${HOST_NAME} to start setup"
 fi
 echo "---------------"
-#echo "Database Information"
-#echo "MySQL Username: root"
-#echo "MySQL Password: $DB_ROOT_PASSWORD"
-#echo "Guacamole DB User: $DB_USER"
-#echo "Guacamole DB Password: "$DB_PASSWORD""
+echo "Database Information"
+echo "MySQL Username: root"
+echo "MySQL Password: $DB_ROOT_PASSWORD"
+echo "Zenphoto DB User: $DB_USER"
+echo "Zenphoto DB Password: "$DB_PASSWORD""
 if [ "${REINSTALL}" == "true" ]; then
 	echo "---------------"
 	echo "You did a reinstall, please user your old credentials to log in."
 else
 	echo "---------------"
-#	echo "User Information"
-#	echo "Default user is guacadmin"
-#	echo "Default password is guacadmin"
+	echo "User Information"
+	echo "Admin user is created on setup."
 fi
 echo "---------------"
 #echo "All passwords are saved in /root/${JAIL_NAME}_db_password.txt"
