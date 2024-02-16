@@ -35,7 +35,7 @@ DB_NAME="zenphoto"
 DB_USER="zenphoto"
 DB_ROOT_PASSWORD=$(openssl rand -base64 15)
 DB_PASSWORD=$(openssl rand -base64 15)
-ZP_VERSION="1.6"
+ZP_VERSION="1.6.1"
 
 # Check for zenphoto-config and set configuration
 SCRIPT=$(readlink -f "$0")
